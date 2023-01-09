@@ -1,7 +1,9 @@
 # Codibly Frontend Developer - Intern recruitment task 
 (https://codibly1.recruitee.com/o/frontend-developer-intern/c/new)
 
-## Tasks
+# Live preview: https://sunny-custard-fbad6e.netlify.app
+
+# Tasks
 * ☑️ Use provided API endpoint to retrieve paginated list of products
 * ☑️ Implement text input at the top of the view for filtering results by id (accepts only numbers)
 * ☑️ Display table with columns for id, name, and year and rows for each product
@@ -15,7 +17,7 @@
 * ☑️ Host the code on a repository on GitHub, GitLab, or Bitbucket
 
 # Extra requirement (optional):
-* ☑️ Please reflect pagination and filtering in the address URL
+* ☑️ Please reflect pagination and filtering in the address URL (ex. https://sunny-custard-fbad6e.netlify.app/#/2)
 * ☑️ Redux
 
 ---
