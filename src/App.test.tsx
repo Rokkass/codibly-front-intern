@@ -2,19 +2,16 @@ import { describe, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { WrappedApp, App } from './App';
+import { App, WrappedApp } from './App';
 
 describe('App', () => {
-  it('Renders hello world', () => {
-    // ARRANGE
+  it('Page back button disabled on app start', () => {
     render(<WrappedApp />);
-    // ACT
-    // EXPECT
     expect(
-      screen.getByRole('heading', {
-        level: 1,
+      screen.getByRole('button', {
+        name: /page_back/i,
       })
-    ).toHaveTextContent('Hello World');
+    ).toBeDisabled();
   });
   it('Renders not found if invalid path', () => {
     render(

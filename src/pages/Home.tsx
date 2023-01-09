@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,8 +15,9 @@ import { Alert, AlertTitle, IconButton, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import api from '../components/API/Api';
+import { handleFetchData } from '../reducers/itemsSlice';
 
 interface Item {
   id: number;
@@ -37,47 +39,61 @@ const style = {
 };
 
 function Home() {
-  const [items, setItems] = useState<Item[]>([]);
+  // Redux
+  const items = useSelector((store: RootState) => store.items);
+  const dispatch = useDispatch();
+  // React useState
+  // navigation between pages
   const [navigation, setNavigation] = useState(1);
+  // current item provided to description modal
   const [currentItem, setCurrentItem] = useState<number>(-1);
+  // modal state (open/closed)
   const [modal, setModal] = useState(false);
+  // warning (open/closed and message)
   const [warning, setWarning] = useState({ open: false, message: '' });
+  // search bar value
   const [search, setSearch] = useState<number>(0);
+  // React Router params
   const { itemId } = useParams();
 
   // function that handle data fetch from API endpoint
   const fetchItems = useCallback(
-    async (searchId = 0) => {
+    async (searchId?: number) => {
       try {
+        // checking for user search bar input, or React Router param
         let id = '0';
         if (searchId) {
           id = searchId.toString();
-        } else if (!searchId && itemId) {
+        } else if (!searchId && itemId && typeof Number(itemId) === 'number') {
           id = itemId;
         }
+        // console.log('id: ', id);
         const prod = await api.get(
           id !== '0' ? `/${id}` : `?page=${navigation}&per_page=5`,
           {}
         );
         if (id === '0') {
-          setItems(prod.data.data);
+          dispatch(handleFetchData(prod.data.data));
         } else {
-          setItems([prod.data.data]);
+          dispatch(handleFetchData([prod.data.data]));
         }
-        setSearch(searchId);
       } catch (e: any) {
         if (e.message === 'Request failed with status code 404') {
           setWarning({
             open: true,
             message: `No such item with provided Id = ${searchId}`,
           });
+        } else if (e.message === 'timeout of 4000ms exceeded') {
+          setWarning({
+            open: true,
+            message: `Page not found, or could not load, refresh the page, or use "GO BACK HOME" button`,
+          });
         } else {
           setWarning({ open: true, message: e.message });
         }
-        await fetchItems();
       }
     },
-    [navigation, itemId]
+    [dispatch, itemId, navigation]
   );
   useEffect(() => {
     fetchItems();
@@ -94,6 +110,7 @@ function Home() {
   ) => {
     const id: number =
       Number(e.target.value) > 0 ? Number(e.target.value) : Number(0);
+    setSearch(id);
     fetchItems(id);
   };
 
@@ -167,7 +184,8 @@ function Home() {
         id="outlined-basic"
         label="Search"
         variant="outlined"
-        type="number"
+        type="text"
+        // inputProps={{ pattern: '[0-9]*' }}
         value={search || ''}
         onChange={(e) => searchChange(e)}
       />
@@ -183,7 +201,7 @@ function Home() {
           <TableBody>
             {items &&
               items.length > 0 &&
-              items.map((item, id) => (
+              items.map((item: Item, id: number) => (
                 <TableRow
                   key={item.id}
                   sx={{
@@ -203,11 +221,15 @@ function Home() {
         </Table>
       </TableContainer>
       {navigation === 1 ? (
-        <Button variant="text" disabled>
+        <Button variant="text" aria-label="page_back" disabled>
           <ArrowBackIcon />
         </Button>
       ) : (
-        <Button variant="text" onClick={() => switchPage(-1)}>
+        <Button
+          variant="text"
+          aria-label="page_back"
+          onClick={() => switchPage(-1)}
+        >
           <ArrowBackIcon />
         </Button>
       )}
@@ -218,6 +240,11 @@ function Home() {
       ) : (
         <Button variant="text" onClick={() => switchPage(1)}>
           <ArrowForwardIcon />
+        </Button>
+      )}
+      {itemId && (
+        <Button>
+          <Link to="/">Go back Home</Link>
         </Button>
       )}
     </>
