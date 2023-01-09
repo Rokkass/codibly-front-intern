@@ -5,7 +5,7 @@ const baseURL = 'https://reqres.in/api/products';
 
 const api = axios.create({
   baseURL,
-  timeout: 1000,
+  timeout: 4000,
   headers: {
     'Content-Type': 'application/json',
   },
