@@ -15,7 +15,7 @@
 * ☑️ Host the code on a repository on GitHub, GitLab, or Bitbucket
 
 # Extra requirement (optional):
-* ☑️ Please reflect pagination and filtering in the address URL
+* ☑️ Please reflect pagination and filtering in the address URL (ex. https://sunny-custard-fbad6e.netlify.app/#/2)
 * ☑️ Redux
 
 ---
