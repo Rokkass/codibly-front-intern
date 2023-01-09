@@ -3,6 +3,9 @@
 
 # Live preview: https://sunny-custard-fbad6e.netlify.app
 
+**To run app use: `npm install` and `npm start`**
+
+
 # Tasks
 * ☑️ Use provided API endpoint to retrieve paginated list of products
 * ☑️ Implement text input at the top of the view for filtering results by id (accepts only numbers)
@@ -12,12 +15,12 @@
 * ☑️ Display 5 items per page in the table
 * ☑️ Implement pagination component with "next" and "previous" arrows to switch between pages
 * ☑️ Handle 4XX and 5XX errors from API endpoint and inform the user of the error
-* ☑️ Use React for the SPA
 * ☑️ Use npm install and npm start to start the app
 * ☑️ Host the code on a repository on GitHub, GitLab, or Bitbucket
 
 # Extra requirement (optional):
-* ☑️ Please reflect pagination and filtering in the address URL (ex. https://sunny-custard-fbad6e.netlify.app/#/2)
+* ☑️ Please reflect pagination and filtering in the address URL (ex. /#/home/2)
+* ☑️ Unit tests
 * ☑️ Redux
 
 ---
